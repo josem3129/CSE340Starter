@@ -10,7 +10,7 @@ Util.getNav = async function (req, res, next) {
     list += '<li><a href="/" title="Home page">Home</a></li>'
     data.rows.forEach(row => {
         list += "<li>"
-        list += `<a href = "inv/type/${row.classification_id}" title = "see our inventory of ${row.classification_name} vehicles"> ${row.classification_name} </a>`
+        list += `<a href = "/inv/type/${row.classification_id}" title = "see our inventory of ${row.classification_name} vehicles"> ${row.classification_name} </a>`
         list += "</li>"
     }); 
     list += "</ul>"
@@ -20,19 +20,19 @@ Util.getNav = async function (req, res, next) {
 /* **************************************
 * Build the classification view HTML
 * ************************************ */
-Util.buildClassificationGrid = async function(data){
+Util.buildClassificationGrid = async function(data,req, res, next){
     let grid
     if(data.length > 0){
         grid = `<ul id = "inv-display">`
         data.forEach(vehicle => {
             grid += `<li>`
-            grid += `<a href ="../../inv/detail/${vehicle.inv_id}" title = "View ${vehicle.inv_make} ${vehicle.inv_model} details"><img src ="${vehicle.inv_thumbnail}" alt = "Image of ${vehicle.inv_make} ${vehicle.inv_model} on CSE Motors"/></a>`
+            grid += `<a href ="../../inv/detail/${vehicle.inv_id}" title = "View ${vehicle.inv_make} ${vehicle.inv_model} details"><img src ="${vehicle.inv_thumbnail}" alt = "Image of ${vehicle.inv_make} ${vehicle.inv_model} on CSE Motors"></a>`
             grid += `<div class="namePrice">`
-            grid += `<hr />`
+            grid += `<hr>`
             grid += `<h2>`
-            grid += `<a href="../../inv/detail/${vehicle.inv_id}" title="View ${vehicle.inv_make} ${vehicle.inv_model} details">
-            ${vehicle.inv_make} ${vehicle.inv_model} </a>`
-            grid += `<span>$${new Intl.NumberFormat('en-US').format(vehicle.inv_price)}</span`
+            grid += `<a href="../../inv/detail/${vehicle.inv_id}" title="View ${vehicle.inv_make} ${vehicle.inv_model} details">${vehicle.inv_make} ${vehicle.inv_model} </a>`
+            grid += `</h2>`
+            grid += `<span>$${new Intl.NumberFormat('en-US').format(vehicle.inv_price)}</span>`
             grid += `</div>`
             grid += `</li>`
         })
@@ -41,7 +41,38 @@ Util.buildClassificationGrid = async function(data){
         grid += `<p class="notice">Sorry, no matching vehicles could be found.</p>`
     }
     return grid;
+    
 }
+
+
+/* ****************************************
+ * single view function
+ **************************************** */
+Util.buildSingleVIewDiv = async function(data, req, res, next){
+    let div
+    let vehicle = data[0];
+    if (data.length > 0) {
+        div = `<div id="vehicle">`
+        div += `<img id="vehicle" src="${vehicle.inv_image}" alt="${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}">`
+        div += `<div class="mainInfo">`
+        div += `<div class="information">`
+        div += `<p>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</p>`
+        div += `<span>Price: $${new Intl.NumberFormat('en-US').format(vehicle.inv_price)}</span>`
+        div += `<p>Miles: ${vehicle.inv_miles}</p>`
+        div += `<p>Color: ${vehicle.inv_color}</p>`
+        div += `</div>`
+        div += `<div class="information2">`
+        div += `<h2>Description:</h2>`
+        div += `<p> ${vehicle.inv_description}</p>`
+        div += `</div>`
+        div += `</div>`
+        div += `</div>`
+    }else{
+        div = `<p class="notice"> Sorry, no matching vehicles could be found.</p>`
+    }
+    return div;
+}
+
 
 /* ****************************************
  * Middleware For Handling Errors

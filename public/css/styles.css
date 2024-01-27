@@ -42,7 +42,7 @@ nav ul{
 }
 nav ul li{
   list-style: none;
-  padding: 20px;
+  padding: 14px;
 }
 nav ul li a{
   color: white;
@@ -142,21 +142,26 @@ footer{
 #review{
   font-family: 'Lemon', serif;
 }
-@media only screen and (min-width: 650px){
-  #hero{
-    max-width: 650px;
-    margin: auto;
-  }
-  h1{
-    margin: auto;
-  }
+#vehicle{
+  max-width: 90%;
+  margin: auto;
 }
-
+.mainInfo{
+  display: flex;
+  flex-direction: column;
+}
+.information, .information2{
+  background-color: #555280;
+  max-width: 100%;
+  color: white;
+  border-radius: 20px;
+}
 #inv-display{
-  display: grid;
-  grid-template-columns: auto auto;
+  display: flex;
+  flex-direction: column;
   padding: 0;
 }
+
 #inv-display li{
   list-style: none;
   display: flex;
@@ -177,7 +182,7 @@ footer{
 #inv-display li a {
   margin-left: auto;
   margin-right: auto;
-
+  
 }
 .namePrice{
   text-align: center;
@@ -187,12 +192,25 @@ footer{
   color: black;
   text-decoration: none;
 }
+@media only screen and (min-width: 700px){
+  #hero{
+    max-width: 650px;
+    margin: auto;
+  }
+  h1{
+    margin: auto;
+  }
+  #inv-display{
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+}
 @media only screen and (min-width: 900px){
   body{
     /* background-color: aqua; */
     background-image: url("../images/site/checkerboard.jpg");
-  }
-  #wrapper{
+    }
+    #wrapper{
     background-color: white;
     max-width: 900px;
     margin: 20px auto 20px auto;
@@ -270,5 +288,38 @@ footer{
   }
   #hero{
     margin: 20px auto;
+  }
+  #inv-display{
+  grid-template-columns: auto auto auto;
+  }
+  #inv-display li{
+    height: 250px;
+  }
+  #vehicle{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px;
+    max-width: 100%;
+  }
+  .mainInfo{
+  flex-direction: column;
+  }
+  .information{
+    width: 300px;
+    margin-right: 10px;
+    text-align: left;
+    padding-left: 10px;
+    border-radius: 30px 30px 0 0;
+    width: 345px;
+    
+  }
+  .information h2{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .information2{
+    border-radius: 0 0 30px 30px ;
+    width: 345px;
+    padding: 2px;
   }
 }
