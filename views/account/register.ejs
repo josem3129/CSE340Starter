@@ -1,0 +1,17 @@
+<h1>Register</h1>
+<%- message %>
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+<form method="post" action="/account/register" id="joinForm">
+    <label class="top"> First Name <input type="text" name="account_firstname"  required></label>
+    <label class="top"> Last Name<input type="text" name="account_lastname"  required></label>
+    <label class="top"> Email <input type="email" name="account_email"  placeholder="Enter a valid email address" required></label>
+    <label class="top"> Password <input type="password" name="account_password" required placeholder="ab12" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"></label>
+    <span class="requirements"> password must be at least 12 characters and has at least 1 uppercase character, 1 number and 1 special character.</span>
+    <input type="submit" value="Register" class="submitBtn">
+</form>

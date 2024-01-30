@@ -1,0 +1,8 @@
+<%- message %>
+<form method="get" class="loginForm">
+    <label class="top">Email<input type="email" name="account_email" required></label>
+    <label class="top">Password<input id="pword" type="password" name="account_password" autocomplete="on" required placeholder="ab12" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"></label>
+    <span id="pswdBtn">Show Password</span>
+    <a class="submitBtn" href="">login</a>
+    <h2 class="noAccount">No account? <a href="/account/register">Sign-up</a></h2>
+</form>

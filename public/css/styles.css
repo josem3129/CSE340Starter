@@ -192,6 +192,88 @@ footer{
   color: black;
   text-decoration: none;
 }
+form{
+  background-color: #393A5C;
+  padding: .5rem;
+  color: white;
+}
+form fieldset{
+  border-radius: 10px;
+  margin: 2rem 0;
+  border: 1px solid white;
+  padding: .5rem 2%;
+}
+form legend{
+  margin: 0 1rem;
+  padding: 0 .5rem;
+}
+form label.top{
+  display: block;
+  padding-top: 1rem;
+  font-size: 1rem;
+}
+form label.top input{
+  display: block;
+  font-size: 1rem;
+  border: solid 1px white;
+  border-radius: 4px;
+  padding: .75rem;
+  color: black;
+  width: 100%;
+  max-width: 20rem;
+  background-color: rgba(0,0,0,0.1);
+  margin: auto;
+  color: white;
+}
+
+.submitBtn{
+  display: block;
+  border: none;
+  background-color: #C2451A;
+  color: white;
+  border-radius: 1rem;
+  padding: .75rem 1.5rem;
+  margin: 10px auto 2rem auto;
+  width: 15%;
+  max-width: 20rem;
+  align-self: center;
+  position: relative;
+}
+.submitBtn:hover{
+  cursor: pointer;
+  box-shadow:3.5px  5px rgba(0, 0, 0, .2);
+  color: red;
+
+}
+form label.top input:required{
+  border-left: red solid 4px;
+}
+form label.top input:required:valid{
+  border-left: green solid;
+}
+.noAccount a{
+  color: wheat;
+}
+#pswdBtn {
+  display: block;
+  background-color: #C2451A;
+  border: 2px solid #000;
+  border-radius: 5px;
+  padding: 2px;
+  margin-top: 1em;
+  font-size: small;
+  width: 10em;
+  text-align: center;
+  margin: 5px auto 5px 27%;
+}
+#pswdBtn:hover{
+  cursor: pointer;
+}
+.requirements{
+  display: block;
+  max-width: 50%;
+  margin: 5px auto 5px auto;
+}
 @media only screen and (min-width: 700px){
   #hero{
     max-width: 650px;
@@ -321,5 +403,10 @@ footer{
     border-radius: 0 0 30px 30px ;
     width: 345px;
     padding: 2px;
+  }
+  form{
+    max-width: 80%;
+    border-radius: 30px;
+    margin: 20px auto 10px auto;
   }
 }

@@ -6,13 +6,12 @@ const invCont = {};
  *  Build inventory by classification view
  * ************************** */
 invCont.buildClassificationId = async function (req, res, next) {
-
     const classification_id = req.params.classificationId
     const data = await invModel.getInventoryByClassificationId(classification_id)
     const grid = await utilities.buildClassificationGrid(data)
     let nav = await utilities.getNav()
     const className = data[0].classification_name
-    res.render("./inventory/classification", {title: className + " vehicle", nav, grid})
+    res.render("./inventory/classification", {title: className + " vehicle", nav, grid, errors: null})
 
 }
 
@@ -25,11 +24,11 @@ invCont.buildInventorySingleVIew = async function (req, res, next){
     const div = await utilities.buildSingleVIewDiv(data)
     let nav = await utilities.getNav()
     let vehicleName = `${data[0].inv_year} ${data[0].inv_make} ${data[0].inv_model}`
-    res.render("./inventory/singleVIew", {title: vehicleName, nav, div})
+    res.render("./inventory/singleVIew", {title: vehicleName, nav, div, errors: null})
 }
 
 /* ***************************
- *  Build inventory single view
+ *  error 500
  * ************************** */
 invCont.buildErrorPage = async function (req, res, next){
     const inventory_id = req.params.inventoryId
@@ -37,7 +36,7 @@ invCont.buildErrorPage = async function (req, res, next){
     const div = await utilities.buildSingleVIewDiv(data)
     // let nav = await utilities.getNav()
     let vehicleName = data.inv_make
-    res.render("./inventory/singleVIew", {title: vehicleName, nav, div})
+    res.render("./inventory/singleVIew", {title: vehicleName, nav, div, errors: null})
 }
 
 module.exports = invCont
