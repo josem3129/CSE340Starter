@@ -79,8 +79,8 @@ Util.buildSingleVIewDiv = async function(data, req, res, next){
 Util.vehicleManagementView = async function(data, req, res, next){
    return `
    <div class = "links">
-     <a href="inventory/addNewClassification">Add New Classification</a>
-     <a href="inventory/addNewVehicle">Add New Vehicle</a>
+     <a href="/inv/addNewClassification">Add New Classification</a>
+     <a href="/inv/addNewVehicle">Add New Vehicle</a>
     </div>`
 }
 
