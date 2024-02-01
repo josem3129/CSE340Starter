@@ -124,7 +124,7 @@ invCont.makeNewVehicle = async function (req, res, next){
         res.render("inventory/addNewVehicle", {title: "Vehicle management", nav, errors: null})
     } else {
         req.flash("notice", "Sorry, the registration failed.")
-        res.status(501).render("inventory/addNewVehicle.ejs", {
+        res.status(501).render("inventory/addNewVehicle", {
         title: "Vehicle management",
         nav,
         })
