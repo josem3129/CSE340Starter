@@ -39,4 +39,95 @@ invCont.buildErrorPage = async function (req, res, next){
     res.render("./inventory/singleVIew", {title: vehicleName, nav, div, errors: null})
 }
 
+/* ***************************
+ *  make classification and add vehicle
+ * ************************** */
+invCont.vehicleManagement = async function (req, res, next){
+    const div = await utilities.vehicleManagementView()
+    console.log(div)
+    let nav = await utilities.getNav()
+    let vehicleName = `Vehicle management`
+    res.render("./inventory/vehicleManagement", {title: vehicleName, nav, div, errors: null})
+}
+
+/* ****************************************
+*  Deliver make classification  view
+* *************************************** */
+invCont.buildAddClassification = async function (req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("inventory/addNewClassification", {title: "Vehicle management",nav,errors: null})
+}
+
+/* ****************************************
+*  Deliver add Vehicle view
+* *************************************** */
+invCont.buildAddVehicle = async function (req, res, next) {
+    let nav = await utilities.getNav()
+    let select = await utilities.makeSelect()
+    console.log(select)
+    res.render("inventory/addNewVehicle", {title: "Vehicle management",nav,select,errors: null})
+}
+
+/* ***************************
+ *  make classification 
+ * ************************** */
+invCont.makeClassification = async function (req, res, next){
+    let nav = await utilities.getNav()
+    const { inv_make } = req.body
+    console.log(`HERE ______ ${inv_make}`)
+    const regResult = await invModel.addClassification(inv_make)
+    if (regResult) {
+        req.flash(
+            "notice",
+            `Congratulations, you're added ${inv_make}.`
+        )
+        res.render("inventory/addNewClassification", {title: "Vehicle management", nav, errors: null})
+    } else {
+        req.flash("notice", "Sorry, the registration failed.")
+        res.status(501).render("inventory/addNewClassification", {
+        title: "Vehicle management",
+        nav,
+        })
+    }
+}
+
+/* ***************************
+ *  add new vehicle
+ * ************************** */
+invCont.makeNewVehicle = async function (req, res, next){
+    let nav = await utilities.getNav()
+    const {classification_id, 
+        inv_make, 
+        inv_model, 
+        inv_description, 
+        inv_image, 
+        inv_thumbnail, 
+        inv_year,
+        inv_price,
+        inv_miles,
+        inv_color} = req.body
+    const regResult = await invModel.addVehicle(classification_id,
+        inv_make, 
+        inv_model, 
+        inv_description, 
+        inv_image, 
+        inv_thumbnail,
+        inv_year, 
+        inv_price,
+        inv_miles,
+        inv_color)
+    if (regResult) {
+        req.flash(
+            "notice",
+            `Congratulations, you're added ${inv_make}.`
+        )
+        res.render("inventory/addNewVehicle", {title: "Vehicle management", nav, errors: null})
+    } else {
+        req.flash("notice", "Sorry, the registration failed.")
+        res.status(501).render("inventory/addNewVehicle.ejs", {
+        title: "Vehicle management",
+        nav,
+        })
+    }
+}
 module.exports = invCont

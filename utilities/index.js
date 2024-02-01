@@ -73,7 +73,31 @@ Util.buildSingleVIewDiv = async function(data, req, res, next){
     return div;
 }
 
+/* ****************************************
+ * Make classification and new vehicle
+ **************************************** */
+Util.vehicleManagementView = async function(data, req, res, next){
+   return `
+   <div class = "links">
+     <a href="inventory/addNewClassification">Add New Classification</a>
+     <a href="inventory/addNewVehicle">Add New Vehicle</a>
+    </div>`
+}
 
+/* ************************
+ * Constructs selection list
+ ************************** */
+Util.makeSelect = async function (req, res, next) {
+    let data = await invModel.getClassifications()
+    let select = `<select name="classification_id" id="classId">`;
+    data.rows.forEach(row => {
+        select += `<option value="${row.classification_id}">`
+        select += `${row.classification_name}`
+        select += `</option>`
+    }); 
+    select += "</select>"
+    return select
+}
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

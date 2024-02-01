@@ -274,6 +274,10 @@ form label.top input:required:valid{
   max-width: 50%;
   margin: 5px auto 5px auto;
 }
+.notice{
+  list-style: none;
+  color: red;
+}
 @media only screen and (min-width: 700px){
   #hero{
     max-width: 650px;
@@ -286,6 +290,10 @@ form label.top input:required:valid{
     display: grid;
     grid-template-columns: auto auto;
   }
+}
+.links{
+ display: flex;
+ flex-direction: column;
 }
 @media only screen and (min-width: 900px){
   body{

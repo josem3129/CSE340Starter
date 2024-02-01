@@ -1,0 +1,21 @@
+
+
+<form class="loginForm" action="/account/login" method="post">
+    <label class="top">Classification 
+        <select name="cars" id="cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="opel">Opel</option>
+        <option value="audi">Audi</option>
+    </select>
+    <label for="Name">Make<input type="text" name="inv_name" required value="<%= locals.account_email %>"></label></label>
+    <label class="top">Model<input type="text" name="account_model" required value="<%= locals.account_email %>"></label>
+    <label class="top"><textarea name="inv_description" id="invTextera" cols="30" rows="10"></textarea></label>
+    <label class="top">Image Path<input type="text" name="account_image" required value="/images/Vehicle/no-image.png"></label>
+    <label class="top">Thumbnail Path<input type="text" name="account_thumbnail" required value="/images/Vehicle/no-image.png"></label>
+    <label class="top">Price<input type="number" name="account_price" required value="<%= locals.account_email %>"></label>
+    <label class="top">Miles<input type="number" name="account_miles" required value="<%= locals.account_email %>"></label>
+    <label class="top">Color<input type="text" name="account_color" required value="<%= locals.account_email %>"></label>
+    <input type="submit" value="SIGN IN" class="submitBtn">
+    <h2 class="noAccount">No account? <a href="/account/register">Sign-up</a></h2>
+</form>
