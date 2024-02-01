@@ -55,7 +55,8 @@ async function addClassification (inv_make){
 /* *****************************
 *   add vehicle to DB
 * *************************** */
-async function addVehicle (inv_name, 
+async function addVehicle (classification_id,
+    inv_make, 
     inv_model, 
     inv_description, 
     inv_image, 
@@ -63,11 +64,10 @@ async function addVehicle (inv_name,
     inv_year, 
     inv_price,
     inv_miles,
-    inv_color,
-    classification_id){
+    inv_color){
     try {
-        const sql = "INSERT INTO classification (inv_name, inv_model, inv_description, inv_image, inv_thumbnail, inv_year, inv_price, inv_miles, inv_color, classification_id) VALUES iF EXIST ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *"
-        return await pool.query(sql, [inv_name, 
+        console.log(classification_id,
+            inv_make, 
             inv_model, 
             inv_description, 
             inv_image, 
@@ -75,8 +75,18 @@ async function addVehicle (inv_name,
             inv_year, 
             inv_price,
             inv_miles,
-            inv_color,
-            classification_id])
+            inv_color)
+        const sql = "INSERT INTO inventory (classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_year, inv_price, inv_miles, inv_color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *"
+        return await pool.query(sql, [classification_id,
+            inv_make, 
+            inv_model, 
+            inv_description, 
+            inv_image, 
+            inv_thumbnail,
+            inv_year, 
+            inv_price,
+            inv_miles,
+            inv_color])
     } catch (error) {
         return error.message
     }
