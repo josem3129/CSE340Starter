@@ -9,7 +9,7 @@ const validate = {};
 validate.classificationRules = () => {
     return [
         //valid classification is require and cannot already exist in DB
-        body("inv_make").matches(/^[a-z]*$/)
+        body("inv_make").matches(/^[a-zA-Z]*$/)
         .trim()
         .isAlpha()
         .isLength({min: 1})
