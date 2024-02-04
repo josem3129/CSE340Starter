@@ -53,6 +53,18 @@ async function addClassification (inv_make){
 }
 
 /* *****************************
+*   check if exist 
+* *************************** */
+async function checkExistingClassification(classification_name){
+    try {
+      const sql = "SELECT * FROM classification WHERE classification_name = $1"
+      const email = await pool.query(sql, [classification_name])
+      return email.rowCount
+    } catch (error) {
+      return error.message
+    }
+  }
+/* *****************************
 *   add vehicle to DB
 * *************************** */
 async function addVehicle (classification_id,
@@ -91,4 +103,4 @@ async function addVehicle (classification_id,
         return error.message
     }
 }
-module.exports = {getClassifications, getInventoryByClassificationId,getInventorySingle, addClassification, addVehicle};
+module.exports = {getClassifications, getInventoryByClassificationId,getInventorySingle, addClassification, addVehicle, checkExistingClassification};

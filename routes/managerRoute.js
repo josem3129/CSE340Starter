@@ -3,6 +3,8 @@ const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/invController");
 const utilities = require("../utilities/")
+const regValidate = require('../utilities/manage-validation')
+
 
 
 // Route for vehicle management
@@ -14,10 +16,10 @@ router.get("/addNewClassification", utilities.handleErrors(invController.buildAd
 router.get("/addNewVehicle", utilities.handleErrors(invController.buildAddVehicle))
 
 // post new classification
-router.post("/addNewClassification", utilities.handleErrors(invController.makeClassification));
+router.post("/addNewClassification", regValidate.classificationRules(), regValidate.checkRegClassificationData, utilities.handleErrors(invController.makeClassification));
 
 // post new Vehicle
-router.post("/addNewVehicle", utilities.handleErrors(invController.makeNewVehicle))
+router.post("/addNewVehicle", regValidate.newVehicleRules(), regValidate.checkRegAddVehicleData, utilities.handleErrors(invController.makeNewVehicle))
 
 
 module.exports = router;

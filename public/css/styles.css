@@ -245,10 +245,10 @@ form label.top input{
   color: red;
 
 }
-form label.top input:required{
+.top input:required{
   border-left: red solid 4px;
 }
-form label.top input:required:valid{
+.top input:required:valid{
   border-left: green solid;
 }
 .noAccount a{
@@ -277,6 +277,21 @@ form label.top input:required:valid{
 .notice{
   list-style: none;
   color: red;
+}
+.textera{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+#invTextera{
+  max-width: 70%;
+  margin: auto;
+}
+#invTextera:required{
+  border: 4px solid red;
+}
+#invTextera:required:valid{
+  border: 4px solid green;
 }
 @media only screen and (min-width: 700px){
   #hero{

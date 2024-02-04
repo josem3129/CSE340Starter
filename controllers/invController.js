@@ -75,14 +75,14 @@ invCont.makeClassification = async function (req, res, next){
     let nav = await utilities.getNav()
     const div = await utilities.vehicleManagementView()
     const { inv_make } = req.body
-    console.log(`HERE ______ ${inv_make}`)
     const regResult = await invModel.addClassification(inv_make)
+    nav = await utilities.getNav()
     if (regResult) {
         req.flash(
             "notice",
             `Congratulations, you're added ${inv_make}.`
         )
-        res.render("inventory/vehicleManagement", {title: "Vehicle management", nav,div, errors: null})
+        res.status(201).render("inventory/vehicleManagement", {title: "Vehicle management", nav,div, errors: null,})
     } else {
         req.flash("notice", "Sorry, the registration failed.")
         res.status(501).render("inventory/vehicleManagement", {
@@ -124,10 +124,10 @@ invCont.makeNewVehicle = async function (req, res, next){
             "notice",
             `Congratulations, you're added ${inv_make}.`
         )
-        res.render("inventory/vehicleManagement", {title: "Vehicle management", nav,div, errors: null})
+        res.status(201).render("inventory/vehicleManagement", {title: "Vehicle management", nav,div, errors: null})
     } else {
         req.flash("notice", "Sorry, the registration failed.")
-        res.status(501).render("inventory/addNewVehicle", {
+        res.status(501).render("inventory/vehicleManagement", {
         title: "Vehicle management",
         nav,
         })

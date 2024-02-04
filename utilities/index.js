@@ -89,7 +89,7 @@ Util.vehicleManagementView = async function(data, req, res, next){
  ************************** */
 Util.makeSelect = async function (req, res, next) {
     let data = await invModel.getClassifications()
-    let select = `<select name="classification_id" id="classId">`;
+    let select = `<select name="classification_id" id="classId" value="<%= locals.classification_ide %>">`;
     data.rows.forEach(row => {
         select += `<option value="${row.classification_id}">`
         select += `${row.classification_name}`

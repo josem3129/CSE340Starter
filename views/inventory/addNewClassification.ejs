@@ -1,22 +1,23 @@
 <% if (title) { %>
-    <h1><%= title %></h1>
-    <% } else {
-      res.redirect('/')
-    } %>
-    
+  <h1><%= title %></h1>
+  <% } else {
+    res.redirect('/')
+  } %>
+  
 <% messages() %>
 
 <% if (errors) { %>
-  <ul class="notice">
- <% errors.array().forEach(error => { %>
-   <li><%= error.msg %></li>
+<ul class="notice">
+<% errors.array().forEach(error => { %>
+ <li><%= error.msg %></li>
 <%  }) %>
- </ul>
+</ul>
 <% } %>
+
 
 <form class="newClassification" action="/inv/addNewClassification" method="post">
     <h2>Classification Name</h2>
-    <label class="top">Name<input type="text" name="inv_make" required value="<%= locals.inv_make %>"></label>
+    <label class="top">Name<input type="text" name="inv_make" required value="<%= locals.inv_make %>" pattern="^[a-zA-Z]*$"></label>
     <p>Name must be alphabetic characters only</p>
     <input type="submit" value="Add" class="submitBtn">
 </form>
