@@ -83,16 +83,26 @@ Util.vehicleManagementView = async function(data, req, res, next){
    <div class = "links">
      <a href="/inv/addNewClassification">Add New Classification</a>
      <a href="/inv/addNewVehicle">Add New Vehicle</a>
+     <h2>Manage Inventory</h2>
+     <p> select a classification from the list to see the items belonging to the classification.</p>
     </div>`
 }
 
 /* ************************
  * Constructs selection list
  ************************** */
-Util.makeSelect = async function (req, res, next) {
+Util.makeSelect = async function (classification_id) {
     let data = await invModel.getClassifications()
-    let select = `<select name="classification_id" id="classId" value="<%= locals.classification_ide %>">`;
+    let select = `<select name="classification_id" id="classificationList" `;
+
+    let value =  "<%= locals.classification_id %>"
+    console.log(data.rows[classification_id])
     data.rows.forEach(row => {
+        if (value == row.classification_id) {
+            select += `<option select value="${row.classification_id}">`
+            select += `${row.classification_name}`
+            select += `</option>`
+        }
         select += `<option value="${row.classification_id}">`
         select += `${row.classification_name}`
         select += `</option>`
@@ -100,12 +110,6 @@ Util.makeSelect = async function (req, res, next) {
     select += "</select>"
     return select
 }
-/* ****************************************
- * Middleware For Handling Errors
- * Wrap other function in this for 
- * General Error Handling
- **************************************** */
-Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
 /* ****************************************
 * Middleware to check token validity
@@ -126,21 +130,28 @@ Util.checkJWTToken = (req, res, next) => {
                 next()
             }
         )
-        
+            
     } else {
         next()
     }
 }
-
+    
 /* ****************************************
- *  Check Login
- * ************************************ */
+*  Check Login
+* ************************************ */
 Util.checkLogin = (req, res, next) => {
     if (res.locals.loggedin) {
-      next()
+        next()
     } else {
-      req.flash("notice", "Please log in.")
-      return res.redirect("/account/login")
+        req.flash("notice", "Please log in.")
+        return res.redirect("/account/login")
     }
-   }
+}
+
+/* ****************************************
+    * Middleware For Handling Errors
+    * Wrap other function in this for 
+    * General Error Handling
+    **************************************** */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 module.exports = Util

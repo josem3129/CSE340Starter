@@ -278,6 +278,10 @@ form label.top input{
   list-style: none;
   color: red;
 }
+.links{
+  display: flex;
+  flex-direction: column;
+ }
 .textera{
   display: flex;
   flex-direction: column;
@@ -293,6 +297,52 @@ form label.top input{
 #invTextera:required:valid{
   border: 4px solid green;
 }
+
+
+table {
+  margin: 10px auto 0 auto;
+  border-collapse: collapse;
+  letter-spacing: 1px;
+  font-size: 1rem;
+}
+
+td, th, thead, .fill{
+  border: 1px solid black;
+  padding: 10px 20px;
+}
+
+th {
+  background-color: #C2451A;
+  padding: 22.3px;
+}
+
+td {
+  text-align: center;
+}
+
+tr:nth-child(even) td {
+  background-color: rgb(206, 204, 204);
+}
+
+tr:nth-child(odd) td {
+  background-color: rgb(245,245,245);
+}
+
+caption {
+  padding: 10px;
+}
+tr:first-child th {
+  background-color: #C2451A;
+  color: white;
+}
+tr #empty{
+  background-color: darkslategrey;
+  margin-top: 0;
+  padding: 0;
+  max-height: 100px;
+  border-top: none
+}
+
 @media only screen and (min-width: 700px){
   #hero{
     max-width: 650px;
@@ -305,10 +355,6 @@ form label.top input{
     display: grid;
     grid-template-columns: auto auto;
   }
-}
-.links{
- display: flex;
- flex-direction: column;
 }
 @media only screen and (min-width: 900px){
   body{

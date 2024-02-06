@@ -6,4 +6,18 @@
 
 <%- messages() %>
 
-<%- div %>
+
+<div class = "links">
+    <a href="/inv/addNewClassification">Add New Classification</a>
+    <a href="/inv/addNewVehicle">Add New Vehicle</a>
+    <h2>Manage Inventory</h2>
+    <p> select a classification from the list to see the items belonging to the classification.</p>
+    <%- classificationSelect %>
+</div>
+
+
+<table id="inventoryDisplay"></table>
+
+<noscript>JavaScript must be enabled to use this page.</noscript>
+
+<script src="../../js/inventory.js"></script>
