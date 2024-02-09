@@ -30,17 +30,15 @@ async function buildLogin (req, res, next) {
 /* ****************************************
 *  Deliver logout
 * *************************************** */
-async function buildLout (req, res, next) {
+async function buildLogout (req, res, next) {
     
     if (req.cookies.jwt) {
         const accessToken = jwt.sign(process.env.ACCESS_TOKEN_SECRET, expires = "Thu, 01 Jan 1970 00:00:00 GMT")
         res.cookie("jwt", accessToken, {httpOnly: true})
-        return res.redirect("//")
+        return res.redirect("/")
             
-    } else {
-        next()
-    }       
-    
+    }  
+    next()
     
 }
 
@@ -205,4 +203,4 @@ async function updatePassword(req, res) {
         res.status(501).redirect("account/edit-account")
     }
 }
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccount, getAccountEdit, updateAccountInfo, buildLout, updatePassword }
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccount, getAccountEdit, updateAccountInfo, buildLogout, updatePassword }
