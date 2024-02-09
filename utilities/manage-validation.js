@@ -28,6 +28,8 @@ validate.classificationRules = () => {
  * ***************************** */
 
 validate.checkRegClassificationData = async(req, res, next) => {
+    let loggedin = res.locals
+    const links = await utilities.linkLoginChange(loggedin)
     const {inv_make} = req.body
     let errors = []
     errors = validationResult(req)
@@ -37,6 +39,7 @@ validate.checkRegClassificationData = async(req, res, next) => {
             errors,
             title: "Vehicle management",
             nav,
+            links,
             inv_make
         })
         return
@@ -81,12 +84,15 @@ validate.checkRegAddVehicleData = async(req, res, next) => {
     let errors = []
     errors = validationResult(req)
     if (!errors.isEmpty()) {
+        let loggedin = res.locals
+        const links = await utilities.linkLoginChange(loggedin)
         let nav = await utilities.getNav()
         let select = await utilities.makeSelect()
         res.render("inventory/addNewVehicle", {
             errors,
             title: "Vehicle management",
             nav,
+            links,
             select,
             classification_id, 
             inv_make, 
@@ -104,50 +110,6 @@ validate.checkRegAddVehicleData = async(req, res, next) => {
     next()
 }
 
-/* ******************************
- * Check data from edit
- * ***************************** */
-
-validate.checkUpdateData = async(req, res, next) => {
-    const {classification_id, 
-        inv_make, 
-        inv_model, 
-        inv_description, 
-        inv_image, 
-        inv_thumbnail, 
-        inv_year,
-        inv_price,
-        inv_miles,
-        inv_color,
-        inv_id} = req.body
-    let errors = []
-    console.log(req)
-    errors = validationResult(req)
-    console.log(errors)
-    if (!errors.isEmpty()) {
-        let nav = await utilities.getNav()
-        let select = await utilities.makeSelect()
-        res.render("inventory/edit-inventory", {
-            errors,
-            title: `Edit ${inv_make} ${inv_model}`,
-            nav,
-            select,
-            classification_id, 
-            inv_make, 
-            inv_model, 
-            inv_description, 
-            inv_image, 
-            inv_thumbnail, 
-            inv_year,
-            inv_price,
-            inv_miles,
-            inv_color,
-            inv_id
-        })
-        return
-    }
-    next()
-}
 
 /* ******************************
  * Check data from edit
@@ -170,12 +132,15 @@ validate.checkUpdateData = async(req, res, next) => {
     errors = validationResult(req)
     console.log(errors)
     if (!errors.isEmpty()) {
+        let loggedin = res.locals
+        const links = await utilities.linkLoginChange(loggedin)
         let nav = await utilities.getNav()
         let select = await utilities.makeSelect()
         res.render("inventory/edit-inventory", {
             errors,
             title: `Edit ${inv_make} ${inv_model}`,
             nav,
+            links,
             select,
             classification_id, 
             inv_make, 

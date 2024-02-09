@@ -36,6 +36,8 @@ validate.registationRules = () => {
  * ***************************** */
 
 validate.checkRegData = async(req, res, next) => {
+    let loggedin = res.locals
+    const links = await utilities.linkLoginChange(loggedin)
     const {account_firstname, account_lastname, account_email} = req.body
     let errors = []
     errors = validationResult(req)
@@ -45,6 +47,7 @@ validate.checkRegData = async(req, res, next) => {
             errors,
             title: "registration",
             nav,
+            links,
             account_email,
             account_firstname,
             account_lastname
@@ -82,6 +85,8 @@ validate.loginRules = () => {
  * ***************************** */
 
 validate.checkRegLoginData = async(req, res, next) => {
+    let loggedin = res.locals
+    const links = await utilities.linkLoginChange(loggedin)
     const {account_email, account_password} = req.body
     let errors = []
     errors = validationResult(req)
@@ -91,6 +96,7 @@ validate.checkRegLoginData = async(req, res, next) => {
             errors,
             title: "Login",
             nav,
+            links,
             account_email,
             account_password
         })
@@ -99,4 +105,82 @@ validate.checkRegLoginData = async(req, res, next) => {
     next()
 }
 
+/*  **********************************
+ *  Registration Data Validation Rules
+ * ********************************* */
+validate.updateRules = () => {
+    return [
+        //first name is require and must be string 
+        body("account_firstname").trim().isLength({min: 1}).withMessage("Please provide a first name."), // on error this message is sent 
+        //Last name is require and must be a string
+        body("account_firstname").trim().isLength({min: 1}).withMessage("Please provide a first name."), // on error this message is sent 
+        //valid email is require and cannot already exist in DB
+        body("account_email").trim().isEmail().normalizeEmail().withMessage("A valid email is required.")
+    ]
+}
+
+/* ******************************
+ * Check data and return errors or continue to update
+ * ***************************** */
+
+validate.checkUpdateData = async(req, res, next) => {
+    let loggedin = res.locals
+    const links = await utilities.linkLoginChange(loggedin)
+    const {account_firstname, account_lastname, account_email, account_id} = req.body
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        res.render("account/edit-account", {
+            errors,
+            title: "registration",
+            nav,
+            links,
+            account_email,
+            account_firstname,
+            account_lastname,
+            account_id
+        })
+        return
+    }
+    next()
+}
+
+/* ******************************
+ * Check data and return errors or continue to update
+ * ***************************** */
+
+validate.checkUpdatePassword = async(req, res, next) => {
+    let loggedin = res.locals
+    const links = await utilities.linkLoginChange(loggedin)
+    const {account_password} = req.body
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        res.render("account/edit-account", {
+            errors,
+            title: "registration",
+            nav,
+            links,
+            account_password
+        })
+        return
+    }
+    next()
+}
+
+//password rules
+validate.passwordRules = ()=> {
+    return [
+         //password is required and must be strong password 
+         body("account_password").trim().isStrongPassword({
+            minLength: 12,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+        }).withMessage("Password does not meet requirements") // on error this message is sent 
+    ]
+}
 module.exports = validate

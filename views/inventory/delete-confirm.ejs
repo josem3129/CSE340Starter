@@ -13,7 +13,7 @@
 <%  }) %>
 </ul>
 <% } %>
-<p class="confirm">Confirm Deletion - The delete is permanent.</p>
+<p class="confirm" >Confirm Deletion - The delete is permanent.</p>
 <form class="addVehicleForm" action="/inv/delete" method="post">
     <label class="top">Make<input type="text" name="inv_make" required value="<%= locals.inv_make %>" placeholder="Min of 3 characters" readonly></label>
     <label class="top">Model<input type="text" name="inv_model" required value="<%= locals.inv_model %>" placeholder="Min of 3 characters" readonly></label>

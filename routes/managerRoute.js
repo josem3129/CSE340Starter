@@ -8,7 +8,7 @@ const regValidate = require('../utilities/manage-validation')
 
 
 // Route for vehicle management
-router.get("/", utilities.handleErrors(invController.vehicleManagement));
+router.get("/", utilities.checkAccountType, utilities.handleErrors(invController.vehicleManagement));
 //route for new classification
 router.get("/addNewClassification", utilities.handleErrors(invController.buildAddClassification));
 

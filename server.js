@@ -19,7 +19,6 @@ const utilities = require("./utilities/")
 const accountRoute = require("./routes/accountRoute")
 const managerRoute = require("./routes/managerRoute")
 const bodyParser = require("body-parser")
-const invController = require("./controllers/invController")
 const { render } = require("ejs")
 
 /* ***********************
@@ -46,6 +45,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true})) //for parsing applications
 app.use(cookieParser())//cookie parser package 
 app.use(utilities.checkJWTToken)//JWT middleware
+
 /* ***********************
 * View Engine and template
 *************************/
@@ -81,6 +81,7 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  console.log(err)
   if(err.status == 404){ 
     message = err.message
   }else {

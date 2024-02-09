@@ -1,0 +1,39 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+  <% } else {
+    res.redirect('/')
+  } %>
+
+<% messages() %>
+
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+<form method="post" action="/account/update" class="joinForm">
+    <label class="top"> First Name <input type="text" name="account_firstname"  id="accountFirstname" required value="<%= locals.account_firstname %>"></label>
+    <label class="top"> Last Name<input type="text" name="account_lastname"   id="accountLastname" required value="<%= locals.account_lastname %>"></label>
+    <label class="top"> Email <input type="email" name="account_email"  id="accountEmail" required value="<%= locals.account_email %>"></label>
+    <input type="submit" value="Update" class="submitBtn">
+    <input type="hidden" name="account_id"
+    <% if(locals.account_id) { %> value="<%= locals.account_id %>"
+    <% } %>>
+</form>
+
+<form method="post" action="/account/Password" class="joinForm">
+  <h2>Change Password</h2>
+    <span class="requirements">*Note your original password will be changed</span>
+    <label class="top"> Password <input id="pword" type="password" name="account_password" required placeholder="ab12" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"></label>
+    <span id="pswdBtn">Show Password</span>
+    <span class="requirements"> password must be at least 12 characters and has at least 1 uppercase character, 1 number and 1 special character.</span>
+    <input type="submit" value="Change" class="submitBtn">
+    <input type="hidden" name="account_id"
+    <% if(locals.account_id) { %> value="<%= locals.account_id %>"
+    <% } %>>
+</form>
+
+<script src="../../js/script.js"></script>

@@ -1,5 +1,7 @@
 const invModel = require("../models/inventory-model")
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { cookie } = require("express-validator");
+const { Cookie } = require("express-session");
 require("dotenv").config()
 const Util = {};
 
@@ -17,6 +19,26 @@ Util.getNav = async function (req, res, next) {
     }); 
     list += "</ul>"
     return list
+}
+
+/* ************************
+ * Constructs log in links
+ ************************** */
+Util.linkLoginChange = async function ( locals) {
+    
+    let link
+    if (locals.loggedin == 1) {
+       
+        link = `<a class="login" href="/account/" title="CLick to log in">Welcome ${locals.accountData.account_firstname}</a>
+        <a class="login" href="/account/logout" title="CLick to log in">Logout</a>`
+        
+    }else{
+        link = `<a class="login" href="/account/login" title="CLick to log in">My Account</a>`
+
+    }
+    
+    return link
+    
 }
 
 /* **************************************
@@ -78,7 +100,7 @@ Util.buildSingleVIewDiv = async function(data, req, res, next){
 /* ****************************************
  * Make classification and new vehicle
  **************************************** */
-Util.vehicleManagementView = async function(data, req, res, next){
+Util.vehicleManagementView = async function( req, res, next){
    return `
    <div class = "links">
      <a href="/inv/addNewClassification">Add New Classification</a>
@@ -94,11 +116,8 @@ Util.vehicleManagementView = async function(data, req, res, next){
 Util.makeSelect = async function (classification_id) {
     let data = await invModel.getClassifications()
     let select = `<select name="classification_id" id="classificationList" `;
-
-    let value =  "<%= locals.classification_id %>"
-    console.log(data.rows[classification_id])
     data.rows.forEach(row => {
-        if (value == row.classification_id) {
+        if (classification_id == row.classification_id) {
             select += `<option select value="${row.classification_id}">`
             select += `${row.classification_name}`
             select += `</option>`
@@ -125,6 +144,7 @@ Util.checkJWTToken = (req, res, next) => {
                     res.clearCookie("jwt")
                     return res.redirect("/account/login")
                 }
+                console.log(`IT WORKED!!!!!`)
                 res.locals.accountData = accountData
                 res.locals.loggedin = 1
                 next()
@@ -141,6 +161,7 @@ Util.checkJWTToken = (req, res, next) => {
 * ************************************ */
 Util.checkLogin = (req, res, next) => {
     if (res.locals.loggedin) {
+        // console.log(res.locals.accountData)
         next()
     } else {
         req.flash("notice", "Please log in.")
@@ -148,6 +169,51 @@ Util.checkLogin = (req, res, next) => {
     }
 }
 
+/* ****************************************
+*  Check Login
+* ************************************ */
+Util.checkAccountType = (req, res, next) => {
+
+    let type = res.locals.accountData
+    if (res.locals.loggedin) {
+
+        if (type.account_type == "Employee" || type.account_type == "Admin") {
+            console.log("Access Granted")
+            next()
+        }
+    } else {
+        req.flash("notice", "Please log in.")
+        return res.redirect("/account/login")
+    }
+}
+
+Util.accountGreeting = async function ( info ) {
+    
+    let greeting
+    if (info.accountData.account_type == "Admin") {
+       
+        greeting = `<h2>Welcome ${info.accountData.account_firstname}</h2>
+        <h3>Inventory Management</h3>
+        <p><a href="/inv/">Manage Inventory</a></p>
+        <a href="/account/edit">Update Info</a>`
+        
+    }else if (info.accountData.account_type == "Employee"){
+        
+        greeting = `<h2>Welcome ${info.accountData.account_firstname}</h2>
+        <h3>Inventory Management</h3>
+        <p><a href="/inv/">Manage Inventory</a></p>
+        <a href="/account/edit">Update Info</a>`
+
+
+    }else{
+        greeting = `<h2>Welcome ${info.accountData.account_firstname}</h2>
+        <a href="/account/edit">Update Info</a>`
+    }
+    
+    return greeting
+
+    
+}
 /* ****************************************
     * Middleware For Handling Errors
     * Wrap other function in this for 

@@ -6,12 +6,14 @@ const invCont = {};
  *  Build inventory by classification view
  * ************************** */
 invCont.buildClassificationId = async function (req, res, next) {
+    let loggedin = res.locals
     const classification_id = req.params.classificationId
     const data = await invModel.getInventoryByClassificationId(classification_id)
     const grid = await utilities.buildClassificationGrid(data)
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     const className = data[0].classification_name
-    res.render("./inventory/classification", {title: className + " vehicle", nav, grid, errors: null})
+    res.render("./inventory/classification", {title: className + " vehicle", nav, links, grid, errors: null})
 
 }
 
@@ -19,59 +21,71 @@ invCont.buildClassificationId = async function (req, res, next) {
  *  Build inventory single view
  * ************************** */
 invCont.buildInventorySingleVIew = async function (req, res, next){
+    let loggedin = res.locals
     const inventory_id = req.params.inventoryId
     const data = await invModel.getInventorySingle(inventory_id)
     const div = await utilities.buildSingleVIewDiv(data)
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     let vehicleName = `${data[0].inv_year} ${data[0].inv_make} ${data[0].inv_model}`
-    res.render("./inventory/singleVIew", {title: vehicleName, nav, div, errors: null})
+    res.render("./inventory/singleVIew", {title: vehicleName, nav, links, div, errors: null})
 }
 
 /* ***************************
  *  error 500
  * ************************** */
 invCont.buildErrorPage = async function (req, res, next){
+    let loggedin = res.locals
     const inventory_id = req.params.inventoryId
     const data = await invModel.getInventorySingle(inventory_id)
     const div = await utilities.buildSingleVIewDiv(data)
     // let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     let vehicleName = data.inv_make
-    res.render("./inventory/singleVIew", {title: vehicleName, nav, div, errors: null})
+    res.render("./inventory/singleVIew", {title: vehicleName, nav, links, div, errors: null})
 }
 
 /* ***************************
  *  make classification and add vehicle
  * ************************** */
 invCont.vehicleManagement = async function (req, res, next){
+    let loggedin = res.locals
     // const div = await utilities.vehicleManagementView()
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     let classificationSelect = await utilities.makeSelect()
     let vehicleName = `Vehicle management`
-    res.render("./inventory/vehicleManagement", {title: vehicleName, nav,classificationSelect, errors: null})
+    res.render("./inventory/vehicleManagement", {title: vehicleName, nav, links, classificationSelect, errors: null})
 }
 
 /* ****************************************
 *  Deliver make classification  view
 * *************************************** */
 invCont.buildAddClassification = async function (req, res, next) {
+    let loggedin = res.locals
     let nav = await utilities.getNav()
-    res.render("inventory/addNewClassification", {title: "Vehicle management",nav,errors: null})
+    const links = await utilities.linkLoginChange(loggedin)
+    res.render("inventory/addNewClassification", {title: "Vehicle management",nav, links, errors: null})
 }
 
 /* ****************************************
 *  Deliver add Vehicle view
 * *************************************** */
 invCont.buildAddVehicle = async function (req, res, next) {
+    let loggedin = res.locals
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     let select = await utilities.makeSelect()
-    res.render("inventory/addNewVehicle", {title: "Vehicle management",nav,select,errors: null})
+    res.render("inventory/addNewVehicle", {title: "Vehicle management",nav, links, select,errors: null})
 }
 
 /* ***************************
  *  make classification 
  * ************************** */
 invCont.makeClassification = async function (req, res, next){
+    let loggedin = res.locals
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     const div = await utilities.vehicleManagementView()
     const { inv_make } = req.body
     const regResult = await invModel.addClassification(inv_make)
@@ -81,12 +95,12 @@ invCont.makeClassification = async function (req, res, next){
             "notice",
             `Congratulations, you're added ${inv_make}.`
         )
-        res.status(201).render("inventory/vehicleManagement", {title: "Vehicle management", nav,div, errors: null,})
+        res.status(201).render("inventory/vehicleManagement", {title: "Vehicle management", nav, links,div, errors: null,})
     } else {
         req.flash("notice", "Sorry, the registration failed.")
         res.status(501).render("inventory/vehicleManagement", {
         title: "Vehicle management",
-        nav,
+        nav, links,
         div
         })
     }
@@ -96,9 +110,10 @@ invCont.makeClassification = async function (req, res, next){
  *  add new vehicle
  * ************************** */
 invCont.makeNewVehicle = async function (req, res, next){
+    let loggedin = res.locals
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     let classificationSelect = await utilities.makeSelect()
-    const div = await utilities.vehicleManagementView()
     const {classification_id, 
         inv_make, 
         inv_model, 
@@ -124,7 +139,7 @@ invCont.makeNewVehicle = async function (req, res, next){
             "notice",
             `Congratulations, you're added ${inv_make}.`
         )
-        res.status(201).render("inventory/vehicleManagement", {title: "Vehicle management", nav,classificationSelect, errors: null})
+        res.status(201).render("inventory/vehicleManagement", {title: "Vehicle management", nav, links,classificationSelect, errors: null})
     } else {
         req.flash("notice", "Sorry, the registration failed.")
         res.status(501).redirect("/inv/")
@@ -148,14 +163,16 @@ invCont.getInventoryJSON = async (req, res, next) => {
 *  edit inventory view
 * *************************************** */
 invCont.getInventory = async function (req, res, next) {
+    let loggedin = res.locals
     let inventory_id = parseInt(req.params.inventory_id)
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     let inventory = await invModel.getInventorySingle(inventory_id)
     let select = await utilities.makeSelect(inventory[0].classification_id)
     let name = `${inventory[0].inv_make} ${inventory[0].inv_model}`
     res.render("./inventory/edit-inventory", {
         title: `Edit ${name}`,
-        nav,
+        nav, links,
         select: select,
         errors: null,
         inv_id: inventory[0].inv_id,
@@ -176,7 +193,9 @@ invCont.getInventory = async function (req, res, next) {
  *  Update vehicle
  * ************************** */
 invCont.updateInventory = async function (req, res, next){
+    let loggedin = res.locals
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     const {classification_id, 
         inv_make, 
         inv_model, 
@@ -211,7 +230,7 @@ invCont.updateInventory = async function (req, res, next){
         req.flash("notice", "Sorry, the insert failed.")
         res.status(501).render("inventory/edit-inventory", {
         title: "Edit " + itemName,
-        nav,
+        nav, links,
         select: select,
         errors: null,
         classification_id, 
@@ -233,13 +252,15 @@ invCont.updateInventory = async function (req, res, next){
 *  delete inventory view
 * *************************************** */
 invCont.deleteInventoryView = async function (req, res, next) {
+    let loggedin = res.locals
     let inventory_id = parseInt(req.params.inventory_id)
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     let inventory = await invModel.getInventorySingle(inventory_id)
     let name = `${inventory[0].inv_make} ${inventory[0].inv_model}`
     res.render("./inventory/delete-confirm", {
         title: `Delete ${name}`,
-        nav,
+        nav, links,
         errors: null,
         inv_id: inventory[0].inv_id,
         inv_make: inventory[0].inv_make,
@@ -253,7 +274,9 @@ invCont.deleteInventoryView = async function (req, res, next) {
  *  Update vehicle
  * ************************** */
 invCont.deleteInventory = async function (req, res, next){
+    let loggedin = res.locals
     let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
     const {inv_id, inv_make, inv_model} = req.body
     const regResult = await invModel.deleteInventory(inv_id)
     if (regResult) {
@@ -268,7 +291,7 @@ invCont.deleteInventory = async function (req, res, next){
         req.flash("notice", "Sorry, the delete failed.")
         res.status(501).render("inventory/delete-confirm", {
         title: "Edit " + itemName,
-        nav,
+        nav, links,
         select: select,
         errors: null,
         inv_id
