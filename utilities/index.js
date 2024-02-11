@@ -10,7 +10,8 @@ const Util = {};
  ************************** */
 Util.getNav = async function (req, res, next) {
     let data = await invModel.getClassifications()
-    let list = "<ul>";
+    let list = `<button id="hamburgerBtn"><span>&#9776;</span><span>X</span></button>`;
+    list += `<ul id="primaryNav">`;
     list += '<li><a href="/" title="Home page">Home</a></li>'
     data.rows.forEach(row => {
         list += "<li>"
@@ -115,16 +116,17 @@ Util.vehicleManagementView = async function( req, res, next){
  ************************** */
 Util.makeSelect = async function (classification_id) {
     let data = await invModel.getClassifications()
-    let select = `<select name="classification_id" id="classificationList" `;
+    let select = `<select name="classification_id" id="classificationList"> `;
     data.rows.forEach(row => {
         if (classification_id == row.classification_id) {
-            select += `<option select value="${row.classification_id}">`
+            select += `<option selected value="${row.classification_id}">`
             select += `${row.classification_name}`
             select += `</option>`
         }
         select += `<option value="${row.classification_id}">`
         select += `${row.classification_name}`
         select += `</option>`
+        console.log(row.classification_id, classification_id)
     }); 
     select += "</select>"
     return select

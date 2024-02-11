@@ -50,6 +50,7 @@ invCont.buildErrorPage = async function (req, res, next){
  * ************************** */
 invCont.vehicleManagement = async function (req, res, next){
     let loggedin = res.locals
+    console.log(loggedin)
     // const div = await utilities.vehicleManagementView()
     let nav = await utilities.getNav()
     const links = await utilities.linkLoginChange(loggedin)
@@ -75,7 +76,7 @@ invCont.buildAddVehicle = async function (req, res, next) {
     let loggedin = res.locals
     let nav = await utilities.getNav()
     const links = await utilities.linkLoginChange(loggedin)
-    let select = await utilities.makeSelect()
+    let select = await utilities.makeSelect(loggedin)
     res.render("inventory/addNewVehicle", {title: "Vehicle management",nav, links, select,errors: null})
 }
 
@@ -113,7 +114,7 @@ invCont.makeNewVehicle = async function (req, res, next){
     let loggedin = res.locals
     let nav = await utilities.getNav()
     const links = await utilities.linkLoginChange(loggedin)
-    let classificationSelect = await utilities.makeSelect()
+    let classificationSelect = await utilities.makeSelect(loggedin)
     const {classification_id, 
         inv_make, 
         inv_model, 
@@ -286,7 +287,7 @@ invCont.deleteInventory = async function (req, res, next){
         )
         res.redirect("/inv/")
     } else {
-        const select = await utilities.makeSelect(classification_id)
+        const select = await utilities.makeSelect(loggedin)
         const itemName = `${inv_make} ${inv_model}`
         req.flash("notice", "Sorry, the delete failed.")
         res.status(501).render("inventory/delete-confirm", {
