@@ -31,9 +31,7 @@
     <span id="pswdBtn">Show Password</span>
     <span class="requirements"> password must be at least 12 characters and has at least 1 uppercase character, 1 number and 1 special character.</span>
     <input type="submit" value="Change" class="submitBtn">
-    <input type="hidden" name="account_id"
-    <% if(locals.account_id) { %> value="<%= locals.account_id %>"
-    <% } %>>
+    <input type="hidden" name="account_id" <% if(locals.account_id) { %> value="<%= locals.account_id %>"<% } %>>
 </form>
 
 <script src="../../js/script.js"></script>

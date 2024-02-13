@@ -203,4 +203,17 @@ async function updatePassword(req, res) {
         res.status(501).redirect("account/edit-account")
     }
 }
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccount, getAccountEdit, updateAccountInfo, buildLogout, updatePassword }
+
+/* ***************************
+ *  Build inventory by favorite
+ * ************************** */
+async function getFavorites (req, res, next) {
+    let loggedin = res.locals
+    const data = await accountModule.getInventoryBYaccountId(loggedin.accountData.account_id)
+    const grid = await utilities.buildClassificationGrid(data)
+    let nav = await utilities.getNav()
+    const links = await utilities.linkLoginChange(loggedin)
+    res.render("./inventory/classification", {title: "favorites" + " vehicle", nav, links, grid, errors: null})
+
+}
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccount, getAccountEdit, updateAccountInfo, buildLogout, updatePassword, getFavorites}

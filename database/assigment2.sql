@@ -29,3 +29,12 @@ SELECT inventory.inv_make,inventory.inv_model, classification.classification_nam
 
 UPDATE public.inventory
 SET inv_image =  REPLACE(inv_image,'/images', '/images/vehicles');
+
+select inv_id
+  from public.userfavoriteitem
+ where account_id = 7;
+
+ SELECT * FROM public.inventory AS i
+            JOIN public.userfavoriteitem AS c
+            ON i.inv_id = c.inv_id
+            WHERE c.account_id = 7;

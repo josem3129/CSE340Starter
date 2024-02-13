@@ -22,13 +22,20 @@ invCont.buildClassificationId = async function (req, res, next) {
  * ************************** */
 invCont.buildInventorySingleVIew = async function (req, res, next){
     let loggedin = res.locals
+    let savedInv = 0
     const inventory_id = req.params.inventoryId
     const data = await invModel.getInventorySingle(inventory_id)
+    loggedin.inv_id = inventory_id
     const div = await utilities.buildSingleVIewDiv(data)
     let nav = await utilities.getNav()
     const links = await utilities.linkLoginChange(loggedin)
+    console.log(loggedin)
+    if (loggedin.loggedin) {
+        savedInv = await invModel.selectInv(loggedin.accountData.account_id)
+    }
+    const save = await utilities.checkIfSave(inventory_id, savedInv, loggedin)
     let vehicleName = `${data[0].inv_year} ${data[0].inv_make} ${data[0].inv_model}`
-    res.render("./inventory/singleVIew", {title: vehicleName, nav, links, div, errors: null})
+    res.render("./inventory/singleVIew", {title: vehicleName, nav, links, div, save,  errors: null})
 }
 
 /* ***************************
@@ -224,7 +231,7 @@ invCont.updateInventory = async function (req, res, next){
             "notice",
             `Congratulations, you're updated ${inv_make} ${inv_model}.`
         )
-        res.redirect("/inv/")
+        res.status(200).redirect("/inv/")
     } else {
         const select = await utilities.makeSelect(classification_id)
         const itemName = `${inv_make} ${inv_model}`
@@ -285,7 +292,7 @@ invCont.deleteInventory = async function (req, res, next){
             "notice",
             `You deleted ${inv_make} ${inv_model}.`
         )
-        res.redirect("/inv/")
+        res.status(200).redirect("/inv/")
     } else {
         const select = await utilities.makeSelect(loggedin)
         const itemName = `${inv_make} ${inv_model}`
@@ -297,6 +304,43 @@ invCont.deleteInventory = async function (req, res, next){
         errors: null,
         inv_id
         })
+    }
+}
+
+invCont.addFavorite = async function  (req, res, next) {
+    const {inv_id} = req.body
+    const account_id = res.locals.accountData.account_id
+    const result = invModel.addFavorite(inv_id, account_id)
+    if (result) {
+        req.flash(
+            "notice",
+            "saved"
+        )
+        res.status(200).redirect(`/account/`)
+    } else {
+        req.flash(
+            "notice",
+            "Not Saved"
+        )
+        res.redirect(`inv/detail/${inv_id}`)
+    }
+}
+
+invCont.removeFavorite = async function (req, res, next){
+    const {inv_id} = req.body
+    const result = invModel.removeFavorite(res.locals.accountData.account_id, inv_id)
+    if (result) {
+        req.flash(
+            "notice",
+            "Removed"
+        )
+        res.status(200).redirect(`/account/`)
+    } else {
+        req.flash(
+            "notice",
+            "Not Removed"
+        )
+        res.redirect(`inv/detail/${inv_id}`)
     }
 }
 module.exports = invCont

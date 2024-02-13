@@ -15,3 +15,6 @@ pswdBtn.addEventListener("click", function() {
   }
 });
 
+array.forEach(element => {
+  
+});

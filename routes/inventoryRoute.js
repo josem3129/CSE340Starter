@@ -23,6 +23,10 @@ router.get("/edit/:inventory_id", utilities.handleErrors(invController.getInvent
 
 //get delete
 router.get("/delete/:inventory_id", utilities.handleErrors(invController.deleteInventoryView))
+// add to favorite
+router.post("/addFavorite", utilities.checkLogin, utilities.handleErrors(invController.addFavorite))
+// remove saved item
+router.post("/removeFavorite", utilities.handleErrors(invController.removeFavorite))
 
 //modi fy post to SQL
 router.post("/update", mangeUtilities.newVehicleRules(), mangeUtilities.checkUpdateData, utilities.handleErrors(invController.updateInventory))

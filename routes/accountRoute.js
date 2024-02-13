@@ -19,6 +19,9 @@ router.get("/",utilities.checkLogin, utilities.handleErrors(accountController.bu
 //edit profile
 router.get("/edit", utilities.handleErrors(accountController.getAccountEdit))
 
+//favorite view
+router.get("/favorites", utilities.handleErrors(accountController.getFavorites))
+
 // Process the registration data 
 router.post("/register", regValidate.registationRules(), regValidate.checkRegData, utilities.handleErrors(accountController.registerAccount))
 

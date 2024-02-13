@@ -149,4 +149,46 @@ async function deleteInventory (inv_id){
         return error.message
     }
 }
-module.exports = {getClassifications, getInventoryByClassificationId,getInventorySingle, addClassification, addVehicle, checkExistingClassification, updateInventory,  deleteInventory};
+
+/* *****************************
+*   add vehicle to DB
+* *************************** */
+async function addFavorite (account_id, inv_make){
+    try {
+        console.log(account_id, inv_make)
+        const sql = "INSERT INTO userfavoriteitem (account_id, inv_id) VALUES ($1, $2) RETURNING *"
+        return await pool.query(sql, [inv_make, account_id])
+    } catch (error) {
+        return error.message
+    }
+}
+
+async function selectInv (account_id){
+    try {
+        const sql = "select inv_id from public.userfavoriteitem where account_id = $1"
+        return await pool.query(sql, [account_id])
+    } catch (error) {
+        return error.message
+    }
+}
+
+async function removeFavorite (account_id, inv_id){
+    try {
+        console.log("TEST!" + account_id, inv_id)
+        const sql = "DELETE FROM public.userfavoriteitem WHERE account_id = $1 AND inv_id = $2"
+        return await pool.query(sql, [account_id, inv_id])
+    } catch (error) {
+        return error.message
+    }
+}
+module.exports = {getClassifications, 
+    getInventoryByClassificationId,
+    getInventorySingle, 
+    addClassification,
+    addVehicle, 
+    checkExistingClassification, 
+    updateInventory, 
+    selectInv, 
+    deleteInventory, 
+    addFavorite, 
+    removeFavorite};

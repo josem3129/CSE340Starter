@@ -77,8 +77,8 @@ Util.buildSingleVIewDiv = async function(data, req, res, next){
     let div
     let vehicle = data[0];
     if (data.length > 0) {
-        div = `<div id="vehicle">`
-        div += `<img id="vehicle" src="${vehicle.inv_image}" alt="${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}">`
+        div = `<div class ="vehicle">`
+        div += `<img class ="vehicle" src="${vehicle.inv_image}" alt="${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}">`
         div += `<div class="mainInfo">`
         div += `<div class="information">`
         div += `<p>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</p>`
@@ -98,6 +98,31 @@ Util.buildSingleVIewDiv = async function(data, req, res, next){
     return div;
 }
 
+/* ****************************************
+ * single view save function
+ **************************************** */
+Util.checkIfSave = async function(inv_id, data, locals, req, res, next){
+    let div = `<form method="post" action="/inv/addFavorite">
+    <input type="submit" value="save" class="submitBtn">
+    `
+    
+    console.log(typeof data)
+    if (locals.loggedin) {
+        
+        data.rows.forEach( itemId => {
+            if (inv_id == itemId.inv_id) {
+                return div = `<form method="post" action="/inv/removeFavorite">
+                <input type="submit" value="Remove" class="submitBtn">
+                `
+            }
+            
+        })
+
+        return div;
+        
+    }
+    return div
+}
 /* ****************************************
  * Make classification and new vehicle
  **************************************** */
@@ -197,25 +222,30 @@ Util.accountGreeting = async function ( info ) {
         greeting = `<h2>Welcome ${info.accountData.account_firstname}</h2>
         <h3>Inventory Management</h3>
         <p><a href="/inv/">Manage Inventory</a></p>
-        <a href="/account/edit">Update Info</a>`
+        <a href="/account/edit">Update Info</a>
+        <a href="/account/favorites"> Favorites </a>`
         
     }else if (info.accountData.account_type == "Employee"){
         
         greeting = `<h2>Welcome ${info.accountData.account_firstname}</h2>
         <h3>Inventory Management</h3>
         <p><a href="/inv/">Manage Inventory</a></p>
-        <a href="/account/edit">Update Info</a>`
+        <a href="/account/edit">Update Info</a>
+        <a href="/account/favorites"> Favorites </a>`
 
 
     }else{
         greeting = `<h2>Welcome ${info.accountData.account_firstname}</h2>
-        <a href="/account/edit">Update Info</a>`
+        <a href="/account/edit">Update Info</a>
+        <a href="/account/favorites"> Favorites </a>`
     }
     
     return greeting
 
     
 }
+
+
 /* ****************************************
     * Middleware For Handling Errors
     * Wrap other function in this for 

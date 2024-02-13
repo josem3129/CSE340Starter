@@ -67,4 +67,39 @@ async function getAccountByEmail (account_email){
     }
 }
 
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail,UpdateAccount, UpdateAccountPassword};
+/* ***************************
+ *  Get all inventory items and classification_name by account_id
+ * ************************** */
+async function getInventoryByClassificationId(account_id){
+    try {
+        const data = await pool.query(
+            `SELECT * FROM public.inventory AS i
+            JOIN public.classification AS c
+            ON i.classification_id = c.classification_id
+            WHERE i.classification_id = $1`,
+            [classification_id]
+        )
+        return data.rows
+    } catch (error) {
+        console.error(`getInventoryByClassificationId error ${error}`)
+    }
+}
+
+/* ***************************
+ *  Get all inventory items and classification_name by classification_id
+ * ************************** */
+async function getInventoryBYaccountId(account_id){
+    try {
+        const data = await pool.query(
+            `SELECT * FROM public.inventory AS i
+            JOIN public.userfavoriteitem AS c
+            ON i.inv_id = c.inv_id
+            WHERE c.account_id = $1`,
+            [account_id]
+        )
+        return data.rows
+    } catch (error) {
+        console.error(`getInventoryByAccountId error ${error}`)
+    }
+}
+module.exports = { registerAccount, checkExistingEmail, getAccountByEmail,UpdateAccount, UpdateAccountPassword, getInventoryBYaccountId};
